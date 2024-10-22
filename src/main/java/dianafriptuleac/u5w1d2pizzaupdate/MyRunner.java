@@ -15,13 +15,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component  //componente gestito da Spring
 @PropertySource("application.properties")
+// Annotazione fondamentale se vogliamo leggere i valori direttamente da application properties tramite @Value
 public class MyRunner implements CommandLineRunner {
 
+    //iniettare il bean Menu
     @Autowired
     private Menu myMenu;
 
+    //inietto il valore del application.properties nella variabile costoCoperto
     @Value("${coperto.costo}")
     private double costoCoperto;
 
@@ -31,12 +34,21 @@ public class MyRunner implements CommandLineRunner {
         Tavolo t1 = new Tavolo(3, 5, StatoTavolo.OCCUPATO);
 
         // elementi
-        List<GenericClass> elementiOrdine = new ArrayList<>();
+        List<GenericClass> elementiOrdine = new ArrayList<>();  //lista vuota
         elementiOrdine.add(myMenu.getAllPizze().get(2)); // Buffala
         elementiOrdine.add(myMenu.getAllBevande().get(1)); // birra
+        elementiOrdine.add(myMenu.getAllPizze().get(0));
+        elementiOrdine.add(myMenu.getAllBevande().get(2));
 
-        // Importo
-        double totaleImporto = elementiOrdine.stream().mapToDouble(GenericClass::getPrezzo).sum() + (2 * costoCoperto); // 2 coperti
+
+        System.out.println("Costo coperto " + costoCoperto);
+
+        double totaleImporto = 0.0;
+        for (GenericClass elemento : elementiOrdine) {
+            totaleImporto += elemento.getPrezzo();
+        }
+        totaleImporto += (2 * costoCoperto);  //ho 2 coperti
+
 
         //ordine
         Ordine ordine = new Ordine(1, t1, elementiOrdine, 2, LocalDateTime.now(), totaleImporto);
