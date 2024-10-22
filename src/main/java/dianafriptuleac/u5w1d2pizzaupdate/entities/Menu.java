@@ -1,8 +1,13 @@
 package dianafriptuleac.u5w1d2pizzaupdate.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class Menu {
     private List<Pizze> allPizze;
     private List<Toppings> allToppings;

@@ -14,19 +14,19 @@ import java.util.List;
 public class MenuConfig {
 
     //-----------------Prova 1 con beans con nome personalizzato
-    /*@Bean(name = "pizzaMargherita")
+    @Bean(name = "pizzaMargherita")
     public Pizze margherita() {
-        return new Pizze("Margherita", 6.50, 1104, new ArrayList<>());
+        return new Pizze("Margherita", 6.50, 1104, new ArrayList<>(), "Classica");
     }
 
     @Bean(name = "pizzaSalamePiccante")
     public Pizze salamePiccante() {
-        return new Pizze("Salame Piccante", 7.50, 1160, new ArrayList<>(List.of("Salame Piccante")));
+        return new Pizze("Salame Piccante", 7.50, 1160, new ArrayList<>(List.of("Salame Piccante")), "XL");
     }
 
     @Bean(name = "pizzaBuffala")
     public Pizze buffala() {
-        return new Pizze("Buffala", 8.50, 1200, new ArrayList<>(List.of("Buffala", "Pomodorini", "Rucola")));
+        return new Pizze("Buffala", 8.50, 1200, new ArrayList<>(List.of("Buffala", "Pomodorini", "Rucola")), "Classica");
     }
 
     //Toppings
@@ -69,28 +69,17 @@ public class MenuConfig {
     //Creo il menu
     @Bean
     public Menu myMenu() {
-        List<Pizze> allPizze = new ArrayList<>();
-        allPizze.add(margherita());
-        allPizze.add(salamePiccante());
-        allPizze.add(buffala());
+        List<Pizze> allPizze = new ArrayList<>(List.of(margherita(), salamePiccante(), buffala()));
+        List<Toppings> allToppings = new ArrayList<>(List.of(tFunghi(), tSalamePiccante(), tBuffala(), tRucola()));
+        List<Bevande> allBevande = new ArrayList<>(List.of(cocaCola(), birra(), acqua()));
 
-        List<Toppings> allToppings = new ArrayList<>();
-        allToppings.add(tBuffala());
-        allToppings.add(tSalamePiccante());
-        allToppings.add(tFunghi());
-        allToppings.add(tRucola());
-
-        List<Bevande> allBevande = new ArrayList<>();
-        allBevande.add(cocaCola());
-        allBevande.add(birra());
-        allBevande.add(acqua());
 
         return new Menu(allPizze, allToppings, allBevande);
     }
-     */
 
 
-    @Bean
+
+   /* @Bean
     public List<Pizze> allPizze() {
         List<Pizze> pizze = new ArrayList<>();
         pizze.add(new Pizze("Margherita", 6.50, 1104, new ArrayList<>(), "Classica"));
@@ -124,7 +113,7 @@ public class MenuConfig {
     @Bean
     public Menu myMenu(List<Pizze> allPizze, List<Toppings> allToppings, List<Bevande> allBevande) {
         return new Menu(allPizze, allToppings, allBevande);
-    }
+    }*/
 
 }
 
