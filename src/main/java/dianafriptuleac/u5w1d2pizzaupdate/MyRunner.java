@@ -30,7 +30,7 @@ public class MyRunner implements CommandLineRunner {
         //  tavolo
         Tavolo t1 = new Tavolo(3, 5, StatoTavolo.OCCUPATO);
 
-        // Creiamo un ordine con elementi
+        // elementi
         List<GenericClass> elementiOrdine = new ArrayList<>();
         elementiOrdine.add(myMenu.getAllPizze().get(2)); // Buffala
         elementiOrdine.add(myMenu.getAllBevande().get(1)); // birra
