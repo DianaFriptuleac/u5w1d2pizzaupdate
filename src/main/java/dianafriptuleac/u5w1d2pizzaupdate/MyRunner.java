@@ -43,16 +43,10 @@ public class MyRunner implements CommandLineRunner {
 
         System.out.println("Costo coperto " + costoCoperto);
 
-        double totaleImporto = 0.0;
-        for (GenericClass elemento : elementiOrdine) {
-            totaleImporto += elemento.getPrezzo();
-        }
-        totaleImporto += (2 * costoCoperto);  //ho 2 coperti
-
-
         //ordine
-        Ordine ordine = new Ordine(1, t1, elementiOrdine, 2, LocalDateTime.now(), totaleImporto);
+        Ordine ordine = new Ordine(1, t1, elementiOrdine, 2, LocalDateTime.now());
 
         System.out.println(ordine);
+        System.out.println("Importo totale " + ordine.calcolaTotaleImporto(costoCoperto));
     }
 }

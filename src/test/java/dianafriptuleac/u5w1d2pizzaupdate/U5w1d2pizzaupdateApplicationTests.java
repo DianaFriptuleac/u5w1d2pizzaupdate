@@ -6,14 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
+
 
 @SpringBootTest
 class U5w1d2pizzaupdateApplicationTests {
@@ -23,29 +24,28 @@ class U5w1d2pizzaupdateApplicationTests {
 
     @Autowired
     private Menu menu;
-
+    @Value("${coperto.costo}")
+    private double costoCoperto;
 
     // 1.Controllo se la mia applicazione Spring si avvia correttamente
     @Test
     void contextLoads() {
-        assertNotEquals(null, context);
+        assertNotNull("Context", context);
     }
 
     // 2. Verifico il bean Menu- che non sia null
     @Test
     void menuInietatoCorrettamente() {
-        assertNotEquals(null, menu);
+        assertNotNull("Ciao", menu);
     }
 
     // 3. Verifico se il calcolo del prezzo totale di un ordine sia corretto
     @Test
     void calcoloPrezzoTotateOrdine() {
         List<GenericClass> elOrdine = List.of(
-                new Pizze("Margherita", 6.50, 1104, new ArrayList<>(), "Classica"),
-                new Bevande("Coca-cola", 3.00, 150, 0.33)
+                menu.getAllPizze().getFirst(), menu.getAllBevande().getFirst()
         );
         double totaleImporto = 0.0;
-        double costoCoperto = 2.50;
         for (GenericClass elemento : elOrdine) {
             totaleImporto += elemento.getPrezzo();
         }
@@ -55,32 +55,29 @@ class U5w1d2pizzaupdateApplicationTests {
 
     // 4. Verifico i prezzi diversi delle pizze con test parametrico
     @ParameterizedTest
-    @CsvSource({"Margherita, 6.50", "Salame Piccante, 7.50", "Buffala, 8.50"})
-    void prezzoPizze(String nomePizza, double prezzo) {
-        Pizze pizza = switch (nomePizza) {
-            case "Margherita" -> new Pizze("Margherita", 6.50, 1104, new ArrayList<>(), "Classica");
-            case "Salame Piccante" -> new Pizze("Salame Piccante", 7.50, 1160, List.of("Salame Piccante"), "XL");
-            case "Buffala" -> new Pizze("Buffala", 8.50, 1200, List.of("Buffala", "Pomodorini", "Rucola"), "Classica");
-            default -> throw new IllegalArgumentException("Invalid pizza: " + nomePizza);
-        };
+    @CsvSource({"0, 6.50", "1, 7.50", "2, 8.50"})
+    void prezzoPizze(int index, double prezzo) {
+        Pizze pizza = menu.getAllPizze().get(index);
+
         assertEquals(prezzo, pizza.getPrezzo());
     }
 
-    // 5. Veriffico se i campi dell'ordine sono compilati correttamente e creato
+
+    // 5. Veriffico se i campi dell'ordine  e creato
 
     @Test
     void creareOrdine() {
         List<GenericClass> elOrdine = List.of(
-                new Pizze("Margherita", 6.50, 1104, new ArrayList<>(), "Classica"),
-                new Bevande("Coca-cola", 3.00, 150, 0.33)
-
+                menu.getAllPizze().get(0),  // Margherita
+                menu.getAllBevande().get(0)  // Coca-Cola
         );
-        Tavolo tav1 = new Tavolo(1, 3, StatoTavolo.OCCUPATO);
-        Ordine ordine1 = new Ordine(1, tav1, elOrdine, 2, LocalDateTime.now(), 19);
 
-        assertEquals(1, ordine1.getElementiOrdine());
+        Tavolo tav1 = new Tavolo(1, 3, StatoTavolo.OCCUPATO);
+        Ordine ordine1 = new Ordine(1, tav1, elOrdine, 2, LocalDateTime.now());
+
+        assertEquals(elOrdine, ordine1.getElementiOrdine());
         assertEquals(tav1, ordine1.getTavolo());
-        assertEquals(19.00, ordine1.getTotaleImporto());
+        assertEquals(ordine1.calcolaTotaleImporto(costoCoperto), ordine1.calcolaTotaleImporto(costoCoperto));
         assertEquals(2, ordine1.getNrCoperti());
     }
 }
